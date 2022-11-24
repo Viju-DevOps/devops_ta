@@ -1,0 +1,6 @@
+node_modules
+/.vs
+images
+dist
+logs
+# /package-lock.json
