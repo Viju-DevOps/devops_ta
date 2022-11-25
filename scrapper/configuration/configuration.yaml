@@ -1,0 +1,30 @@
+
+UK_URL: "https://ofsistorage.blob.core.windows.net/publishlive/2022format/ConList.html"
+RBI_URL: [
+"https://www.un.org/securitycouncil/sanctions/1267/aq_sanctions_list",
+"https://www.un.org/securitycouncil/sanctions/751/materials",
+"https://www.un.org/securitycouncil/sanctions/1518/materials",
+"https://www.un.org/securitycouncil/sanctions/1533/materials",
+"https://www.un.org/securitycouncil/sanctions/1591/materials",
+"https://www.un.org/securitycouncil/sanctions/1718/materials",
+"https://www.un.org/securitycouncil/sanctions/1970/materials",
+"https://www.un.org/securitycouncil/sanctions/1988/materials",
+"https://www.un.org/securitycouncil/sanctions/2048/sanctions-list-materials",
+"https://www.un.org/securitycouncil/sanctions/2127/sanctions-list-materials",
+"https://www.un.org/securitycouncil/sanctions/2140/sanctions-list-materials",
+"https://www.un.org/securitycouncil/sanctions/2206/materials",
+"https://www.un.org/securitycouncil/sanctions/2374/materials",
+]
+US_URL: "https://www.treasury.gov/ofac/downloads/sdnlist.txt"
+EU_URL: "https://webgate.ec.europa.eu/fsd/fsf/public/files/pdfFullSanctionsList/content?token=dG9rZW4tMjAxNw"
+EU_DOWNLOAD_FOLDER_NAME: "eu_downloads"
+#DB_NAME: "kc_sanctions"
+#DB_USER: "postgres"
+#DB_PWD: "6y$WhW&c4Nx153DRKrVKI"
+#DB_HOST: "database-2-instance-1.cax4yfaijbds.ap-southeast-1.rds.amazonaws.com"
+#DB_PORT: "5432"
+DB_NAME: "travancore_db"
+DB_USER: "travancore"
+DB_PWD: "x9zTW5!96q"
+DB_HOST: "dev-kinara-analytics.c7bnqj62apqh.ap-south-1.rds.amazonaws.com"
+DB_PORT: "3307"

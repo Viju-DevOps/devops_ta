@@ -1,8 +1,0 @@
-selenium==4.5.0
-PyYAML==6.0
-webdriver-manager==3.8.3
-bs4
-html5lib
-psycopg2
-cryptography
-#psycopg2==2.9.5
