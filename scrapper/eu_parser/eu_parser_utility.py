@@ -3,6 +3,7 @@ import os
 import re
 import requests
 from PyPDF2 import PdfReader
+from utils import split_values_and_generate_list,remove_multiple_delimiters,dob_format_converter_uk,dob_format_converter_eu,json_converter
 
 
 def download_eu_sanction_list_pdf(eu_url, destination_folder):
@@ -90,14 +91,14 @@ def extract_eu_data_from_pdf(file_path):
                     if identification_number:
                         identification_no.append([source, identification_number])
 
-            sanction_data_dict['name'] = name
-            sanction_data_dict['alias_name_good_quality'] = alias_names
-            sanction_data_dict['dob'] = dob
-            sanction_data_dict['pob'] = pob
-            sanction_data_dict['nationality'] = nationality
-            sanction_data_dict['address'] = address
+            sanction_data_dict['name'] = name.replace(" ","")
+            sanction_data_dict['alias_name_good_quality'] = json_converter(alias_names)
+            sanction_data_dict['dob'] =json_converter(dob_format_converter_eu(dob))
+            sanction_data_dict['pob'] = json_converter(pob)
+            sanction_data_dict['nationality'] = json_converter(nationality)
+            sanction_data_dict['address'] = json_converter(address)
             sanction_data_dict['identification_no'] = __set_identification_number(identification_no)
-            sanction_data_dict['source'] = 'EU'
+            sanction_data_dict['data_source'] = 'EU'
             sanction_data_list.append(sanction_data_dict)
     return sanction_data_list
 

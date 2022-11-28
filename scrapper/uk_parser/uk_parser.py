@@ -1,4 +1,4 @@
-from scrapper.uk_parser import uk_parser_utility
+from uk_parser import uk_parser_utility
 
 
 def start_uk_parsing(uk_url):

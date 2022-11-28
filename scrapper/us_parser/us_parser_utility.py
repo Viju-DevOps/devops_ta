@@ -2,7 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 import json
-from scrapper.utils import split_values_and_generate_list
+from utils import split_values_and_generate_list,dob_format_converter_us,json_converter,us_gender
+import pandas as pd
+from datetime import timedelta, date
 
 def start_us_web_scraping(uk_url):
     """ Function to scrape sanction list from uk html page
@@ -48,6 +50,7 @@ def format_us_data(us_scrape_data):
                 alias_names_list.append(alias_name)
             if address:
                 address_list.append(address)
+                
             for data_details in data_details_list[1:]:
                 data_details = data_details.replace('\n', ' ')
                 data_details = str(data_details.split('(individual)')[0])
@@ -70,8 +73,7 @@ def format_us_data(us_scrape_data):
                 elif 'POB' in data_details:
                     data_details = data_details.split('POB')[1].strip()
                     data_details_pob = split_values_and_generate_list([data_details])              
-                    pob_list.append(data_details_pob)
-                  
+                    pob_list.append(json.loads(data_details_pob)[0])             
                 elif 'nationality' in data_details:
                     data_details = data_details.split('nationality')[1].strip()
                     nationality_list.append(data_details)
@@ -96,23 +98,23 @@ def format_us_data(us_scrape_data):
                 elif 'Gender' in data_details:
                     data_details = data_details.split('Gender')[1].strip()
                     gender = data_details
-            sanction_data_dict['name'] = name.strip().replace(",","")
-            sanction_data_dict['dob'] = __format_date(dob_list)
-            sanction_data_dict['pob'] = pob_list
-            sanction_data_dict['address'] = address_list
-            sanction_data_dict['alias_name_good_quality'] = alias_names_list
-            sanction_data_dict['passport_no'] = passport_list
-            sanction_data_dict['nationality'] = nationality_list
+            sanction_data_dict['name'] = name.strip('\"').replace(",","")
+            sanction_data_dict['dob'] = json_converter(dob_format_converter_us(__format_date(dob_list)))
+            sanction_data_dict['pob'] = json_converter(pob_list)
+            sanction_data_dict['address'] = split_values_and_generate_list(address_list)
+            sanction_data_dict['alias_name_good_quality'] = json_converter(alias_names_list)
+            sanction_data_dict['passport_no'] = json_converter(passport_list)
+            sanction_data_dict['nationality'] = json_converter(nationality_list)
             if identification_no_list:
                 nationality = ''
                 if nationality_list:
                     nationality = nationality_list[0]
                 sanction_data_dict['identification_no'] = __format_identification_number(identification_no_list,
                                                                                          nationality)
-            sanction_data_dict['national_identification_no'] = national_id_no_list
-            sanction_data_dict['drivers_license_no'] = drivers_license_list
-            sanction_data_dict['email_address'] = email_address_list
-            sanction_data_dict['gender'] = gender
+            sanction_data_dict['national_identification_no'] = json_converter(national_id_no_list)
+            sanction_data_dict['drivers_license_no'] = json_converter(drivers_license_list)
+            sanction_data_dict['email_address'] = json_converter(email_address_list)
+            sanction_data_dict['gender'] = us_gender(gender.strip())
             sanction_data_dict['data_source'] = 'US'
             sanction_data_list.append(sanction_data_dict)
     return sanction_data_list
@@ -137,7 +139,7 @@ def __format_name(name_string):
         name_details_list = name_string.split(',')
         name = ' '.join(name_details_list[:2])
         address = ','.join(name_details_list[2:])
-
+        
     return name, address, alias_names_string
 
 
@@ -193,17 +195,47 @@ def __format_date(date_list):
     try:
         final_date_list = []
         for date in date_list:
-            dd_mm_yy_list = date.split(' ')
-            if len(dd_mm_yy_list) > 2:
-                mm = dd_mm_yy_list[1].strip()
-                dd = dd_mm_yy_list[0].strip()
-                yy = dd_mm_yy_list[2].strip()
-                month = months[mm]
-                date = datetime.datetime(int(yy), int(month), int(dd), 0, 0)
-                date_string = date.strftime('%d/%m/%Y')
-                final_date_list.append(date_string)
+            if "to" in date:
+                val=date.split(" ")
+                if len(val[0]) ==4:
+                    start= int(val[0])
+                    end=int(val[2])
+                    count=0
+                    while start <= end:
+                        count=start
+                        final_date_list.append(str(count))
+                        start+=1
+                  
+                else:
+                    splitted=date.replace(" ",'').split("to")
+                    lst=[]
+                    for i in range(len(splitted)):
+                        dd=splitted[i][:2]
+                        mm=months[splitted[i][2:5]]
+                        yy=splitted[i][5:]
+                        convert=str(dd)+"-"+str(mm)+"-"+str(yy)
+                        lst.append(convert)
+                    
+                    start = datetime.datetime.strptime(lst[0], "%d-%m-%Y")
+                    end = datetime.datetime.strptime(lst[1], "%d-%m-%Y")
+                    date_generated = pd.date_range(start, end,periods=None, freq=None, tz=None, normalize=False, name=None)
+                    date_final=date_generated.strftime("%Y-%m-%d")
+                    for dates in date_final:
+                        final_date_list.append(dates)
+                    
             else:
-                final_date_list.append(dd_mm_yy_list[0].strip())
+                dd_mm_yy_list = date.split(' ')
+                if len(dd_mm_yy_list) > 2:
+                    mm = dd_mm_yy_list[1].strip()
+                    dd = dd_mm_yy_list[0].strip()
+                    yy = dd_mm_yy_list[2].strip()
+                    month = months[mm]
+                    date = datetime.datetime(int(yy), int(month), int(dd), 0, 0)
+                    date_string = date.strftime('%Y-%m-%d')
+                    final_date_list.append(date_string)
+                else:
+                    final_date_list.append(dd_mm_yy_list[0].strip())
+        
     except Exception as e:
-        print(e)
+        pass
     return final_date_list

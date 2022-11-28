@@ -1,7 +1,7 @@
 import json
 import requests
 from bs4 import BeautifulSoup
-from scrapper.utils import split_values_and_generate_list,remove_multiple_delimiters,dob_format_converter_uk
+from utils import split_values_and_generate_list,remove_multiple_delimiters,dob_format_converter_uk
 
 
 def start_uk_web_scraping(uk_url):

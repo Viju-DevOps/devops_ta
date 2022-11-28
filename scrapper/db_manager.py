@@ -14,7 +14,7 @@ class DbManager(object):
                            + " password=" + db_configurations["DB_PWD"]
 
         try:
-            self.conn = mysql.connector.connect(host='localhost', database='kc_sanctions', user='root', password='root',auth_plugin='mysql_native_password')
+            self.conn = mysql.connector.connect(host=db_configurations["DB_HOST"], database=db_configurations["DB_NAME"], user=db_configurations["DB_USER"], password=db_configurations["DB_PWD"],auth_plugin='mysql_native_password',port= db_configurations["DB_PORT"])
             # self.conn = psycopg2.connect(self.conn_string)
             self.cursor = self.conn.cursor()
             self.create_tables()

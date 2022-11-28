@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     # Start RBI parsing
     rbi_data_list = data_parser.start_rbi_parser(configurations)
-
+    
     # Start RBI Data insertion
     if rbi_data_list:
         data_parser.clear_table_contents(configurations, table_name, column_name, 'RBI')
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # Start US parsing
     us_data_list = data_parser.start_us_parser(configurations)
-   
+
     # Start US Data insertion
     if us_data_list:
         data_parser.clear_table_contents(configurations, table_name, column_name, 'US')
@@ -35,8 +35,8 @@ if __name__ == '__main__':
 
     # Start EU parsing
     eu_data_list = data_parser.start_eu_parser(configurations)
-
-    # Start EU Data insertion
+    
+    # # Start EU Data insertion
     if eu_data_list:
         data_parser.clear_table_contents(configurations, table_name, column_name, 'EU')
         data_parser.start_db_insertion(configurations, eu_data_list)

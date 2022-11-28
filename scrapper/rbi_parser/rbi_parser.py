@@ -1,5 +1,5 @@
-from scrapper.rbi_parser.get_dynamic_url import get_rbi_dynamic_url
-from scrapper.rbi_parser.rbi_parser_utility import start_rbi_web_scraping, get_rbi_data_list
+from rbi_parser.get_dynamic_url import get_rbi_dynamic_url
+from rbi_parser.rbi_parser_utility import start_rbi_web_scraping, get_rbi_data_list
 
 
 def start_rbi_parsing(rbi_url_list):

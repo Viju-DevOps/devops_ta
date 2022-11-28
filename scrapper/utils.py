@@ -1,6 +1,8 @@
 import re
 import json
 import datetime
+from datetime import timedelta, date
+import pandas as pd
 
 def remove_multiple_delimiters(string, delimiter_string):
     """Function to split a string with multiple delimiters
@@ -17,7 +19,7 @@ def remove_multiple_delimiters(string, delimiter_string):
         string_list = re.split(delimiter_string, string)
         for string in string_list:
             if string != "":
-                output_string_list.append(string.strip())
+                output_string_list.append(string.strip().replace(".","").replace("Approximately","").strip())
     return output_string_list
 
 
@@ -76,14 +78,106 @@ def dob_format_converter_us(date_list):
     """
     dates=[]
     for dob_string in date_list:
-        if "/" in dob_string:
-            raw_date = datetime.datetime.strptime(dob_string, "%d/%m/%Y")
-            s = raw_date.strftime('%Y-%m-%d')
-            dates.append(s)
-        elif "circa" in dob_string:
+        if "circa" in dob_string:
             continue
-        elif dob_string.isalpha()==True:
-            continue
-        elif dob_string[:4].isdigit()==True:
+        else:
             dates.append(dob_string)
     return dates
+
+def json_converter(lst):
+    """"
+    Args : list of data
+
+    Returns : json converted list
+    """
+    return json.dumps(lst)
+
+
+
+def dob_format_converter_rbi(splitted):
+    """Function to extract individual dobs from a list of dobs in various formats.
+  
+
+    Args:
+        splitted: list containing dobs in various formats
+        
+
+    Returns: returns list of dobs in which individual dobs are seperated
+
+    """
+    months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10,
+              'Nov': 11, 'Dec': 12}
+    try:
+        final_date_list=[]
+        between_years=[]
+        
+        for i in splitted:
+            if len(i)!=4:
+                if "Between"  not in i:
+                    date=i.split(" ")
+                    dd=date[0]
+                    mm=months[date[1]]
+                    yy=date[2]
+                    convert=str(yy)+"-"+str(mm)+"-"+str(dd)
+                    final_date_list.append(convert)
+                elif "Between" in i:
+                    for year in i.split(" "):
+                        if year.isnumeric()==True:
+                            between_years.append(year)
+                    start=int(between_years[0])
+                    end=int(between_years[1])
+                    count=0
+                    while start <= end:
+                        count=start
+                        final_date_list.append(str(count))
+                        start+=1
+
+            else:
+                final_date_list.append(str(i))
+    except Exception as e:
+        pass
+    return final_date_list
+
+
+def dob_format_converter_eu(dates_lst):
+    from datetime import timedelta, date,datetime
+    import pandas as pd
+    years=[]
+    final_date_list=[]
+    for dates in dates_lst:
+        if "Circa" or "from" in dates:
+            split_date=dates.split(" ")
+            if len(split_date)>2:
+                for content in split_date:
+                    if content.isnumeric()==True:
+                        years.append(content)
+                start=int(years[0])
+                end=int(years[1])
+                count=0
+                while start <= end:
+                    count=start
+                    final_date_list.append(str(count))
+                    start+=1
+            elif len(split_date)==2:
+                final_date_list.append(split_date[1])
+            else:
+                pass #Circa
+        elif "/" in dates:
+            split=dates.split("/")
+            if len(split)==3:
+                raw_date = datetime.strptime(dates, "%d/%m/%Y")
+                year_m_d = raw_date.strftime('%Y-%m-%d')
+                final_date_list.append(year_m_d)
+            else:
+                raw_date = datetime.strptime(dates, "%m/%Y")
+                year_m_d = raw_date.strftime('%Y-%m')
+                final_date_list.append(year_m_d)
+        else:
+            final_date_list.append(dates)
+    return final_date_list
+
+def us_gender(gender):
+    if len(gender)>6:
+        pass
+    else:
+        return gender

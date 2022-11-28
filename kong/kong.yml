@@ -1,0 +1,27 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: user-details-validate
+    url: http://13.235.179.40:5000/api/user/validate
+    routes:
+      - name: validate-route
+        paths:
+          - /validate
+        strip_path: true
+  - name: user-details-doc
+    url: http://13.235.179.40:5000/user-docs
+    routes:
+      - name: documentation
+        paths:
+          - /user-docs
+        strip_path: true
+  # - host: mockbin.org
+  #   name: example_service
+  #   port: 80
+  #   protocol: http
+  #   routes:
+  #     - name: example_route
+  #       paths:
+  #         - /test-moc
+  #       strip_path: true

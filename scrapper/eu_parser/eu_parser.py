@@ -1,4 +1,4 @@
-from scrapper.eu_parser import eu_parser_utility
+from eu_parser import eu_parser_utility
 
 
 def start_eu_parsing(eu_url, folder_name):

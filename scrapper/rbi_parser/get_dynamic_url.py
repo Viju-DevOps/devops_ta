@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.options import Options
 import platform
 from webdriver_manager.chrome import ChromeType
 import time
@@ -68,7 +68,7 @@ def __setup_firefox() -> webdriver:
     firefox_profile.set_preference("dom.disable_open_during_load", False)
     firefox_profile.accept_untrusted_certs = True
     firefox_options = Options()
-    # firefox_options.add_argument('-headless')
+    firefox_options.add_argument('-headless')
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), firefox_profile=firefox_profile,
                                options=firefox_options)
     driver.maximize_window()

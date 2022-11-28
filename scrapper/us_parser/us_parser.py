@@ -1,4 +1,4 @@
-from scrapper.us_parser import us_parser_utility
+from us_parser import us_parser_utility
 
 
 def start_us_parsing(us_url):

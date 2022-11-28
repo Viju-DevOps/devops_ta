@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import re
-from scrapper.utils import remove_multiple_delimiters
-from scrapper.utils import split_values_and_generate_list
+from utils import remove_multiple_delimiters
+from utils import split_values_and_generate_list,dob_format_converter_rbi,json_converter
 
 def start_rbi_web_scraping(rbi_dynamic_url):
     """ Function to scrape sanction list from RBI dynamic url
@@ -57,23 +57,23 @@ def get_rbi_data_list(rbi_raw_data):
         name = __modify_name_string_list(name)
         sanction_data_dict['name'] = name.replace(" ","")
         sanction_data_dict['original_script'] = original_script
-        sanction_data_dict['title'] = remove_multiple_delimiters(title, alphabet_delimiters)
-        sanction_data_dict['designation'] = __fetch_details(data_details, 'Designation:')
+        sanction_data_dict['title'] = json_converter(remove_multiple_delimiters(title, alphabet_delimiters))
+        sanction_data_dict['designation'] = json_converter(__fetch_details(data_details, 'Designation:'))
         dob = __fetch_details(data_details, 'DOB:')
-        sanction_data_dict['dob'] = remove_multiple_delimiters(dob, alphabet_delimiters)
+        sanction_data_dict['dob'] =json_converter(dob_format_converter_rbi(remove_multiple_delimiters(dob, alphabet_delimiters)))
         pob = __fetch_details(data_details, 'POB:')
         sanction_data_dict['pob'] = split_values_and_generate_list(remove_multiple_delimiters(pob, alphabet_delimiters))
         good_quality = __fetch_details(data_details, 'Good quality a.k.a.:')
-        sanction_data_dict['alias_name_good_quality'] = remove_multiple_delimiters(good_quality, alphabet_delimiters)
-        sanction_data_dict['alias_name_low_quality'] = __fetch_details(data_details, 'low quality a.k.a.:')
+        sanction_data_dict['alias_name_good_quality'] = json_converter(remove_multiple_delimiters(good_quality, alphabet_delimiters))
+        sanction_data_dict['alias_name_low_quality'] = json_converter(__fetch_details(data_details, 'low quality a.k.a.:'))
         nationality = __fetch_details(data_details, 'Nationality:')
-        sanction_data_dict['nationality'] = remove_multiple_delimiters(nationality, alphabet_delimiters)
+        sanction_data_dict['nationality'] = json_converter(remove_multiple_delimiters(nationality, alphabet_delimiters))
         passport_no = __fetch_details(data_details, 'Passport no:')
-        sanction_data_dict['passport_no'] = remove_multiple_delimiters(passport_no, alphabet_delimiters)
+        sanction_data_dict['passport_no'] = json_converter(remove_multiple_delimiters(passport_no, alphabet_delimiters))
         national_identification_no = __fetch_details(data_details, 'National identification no:')
-        sanction_data_dict['national_identification_no'] = remove_multiple_delimiters(national_identification_no, alphabet_delimiters)
+        sanction_data_dict['national_identification_no'] = json_converter(remove_multiple_delimiters(national_identification_no, alphabet_delimiters))
         address = __fetch_details(data_details, 'Address:')
-        sanction_data_dict['address'] = remove_multiple_delimiters(address, alphabet_delimiters)
+        sanction_data_dict['address'] = json_converter(remove_multiple_delimiters(address, alphabet_delimiters))
         sanction_data_dict['listed_on'] = __fetch_details(data_details, 'Listed on:')
         sanction_data_dict['other_information'] = __fetch_details(data_details, 'Other information:')
         sanction_data_dict['data_source'] = "RBI"
