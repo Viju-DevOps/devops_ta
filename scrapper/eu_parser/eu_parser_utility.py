@@ -3,7 +3,7 @@ import os
 import re
 import requests
 from PyPDF2 import PdfReader
-from utils import split_values_and_generate_list,remove_multiple_delimiters,dob_format_converter_uk,dob_format_converter_eu,json_converter
+from utils import dob_format_converter_eu,json_converter
 
 
 def download_eu_sanction_list_pdf(eu_url, destination_folder):
@@ -216,7 +216,6 @@ def __set_identification_number(identification_no_list):
 
     """
     identification_no_dict = {}
-    print(identification_no_list)
     for identification_no in identification_no_list:
         country_string = identification_no[0]
         identification_number = identification_no[1]

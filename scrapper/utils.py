@@ -1,7 +1,6 @@
 import re
 import json
 import datetime
-from datetime import timedelta, date
 import pandas as pd
 
 def remove_multiple_delimiters(string, delimiter_string):
@@ -140,8 +139,7 @@ def dob_format_converter_rbi(splitted):
 
 
 def dob_format_converter_eu(dates_lst):
-    from datetime import timedelta, date,datetime
-    import pandas as pd
+   
     years=[]
     final_date_list=[]
     for dates in dates_lst:
@@ -158,22 +156,20 @@ def dob_format_converter_eu(dates_lst):
                     count=start
                     final_date_list.append(str(count))
                     start+=1
-            elif len(split_date)==2:
-                final_date_list.append(split_date[1])
+            elif len(split_date)==2: #Circa 1903 , Circa 05/05/1955
+                slash_splitter = split_date[1].split("/")
+                if len(slash_splitter)!=3:
+                    final_date_list.append(split_date[1])
             else:
                 pass #Circa
-        elif "/" in dates:
+        if "/" in dates:
             split=dates.split("/")
             if len(split)==3:
-                raw_date = datetime.strptime(dates, "%d/%m/%Y")
-                year_m_d = raw_date.strftime('%Y-%m-%d')
-                final_date_list.append(year_m_d)
-            else:
-                raw_date = datetime.strptime(dates, "%m/%Y")
-                year_m_d = raw_date.strftime('%Y-%m')
-                final_date_list.append(year_m_d)
-        else:
+                date=split[2]+"-"+split[1]+"-"+split[0].replace("Circa","").strip()
+                final_date_list.append(date)
+        elif len(dates)==4:
             final_date_list.append(dates)
+    
     return final_date_list
 
 def us_gender(gender):

@@ -3,7 +3,7 @@ from configuration.configuration import get_configurations
 
 
 if __name__ == '__main__':
-    table_name = 'user_details'
+    table_name = 'sanctions_list'
     column_name = 'data_source'
 
     # Fetch configurations from configuration YAML file
@@ -35,8 +35,7 @@ if __name__ == '__main__':
 
     # Start EU parsing
     eu_data_list = data_parser.start_eu_parser(configurations)
-    
-    # # Start EU Data insertion
+   
     if eu_data_list:
         data_parser.clear_table_contents(configurations, table_name, column_name, 'EU')
         data_parser.start_db_insertion(configurations, eu_data_list)

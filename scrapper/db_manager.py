@@ -14,6 +14,7 @@ class DbManager(object):
                            + " password=" + db_configurations["DB_PWD"]
 
         try:
+            # host=db_configurations["DB_HOST"], database=db_configurations["DB_NAME"], user=db_configurations["DB_USER"], password=db_configurations["DB_PWD"],auth_plugin='mysql_native_password',port= db_configurations["DB_PORT"]
             self.conn = mysql.connector.connect(host=db_configurations["DB_HOST"], database=db_configurations["DB_NAME"], user=db_configurations["DB_USER"], password=db_configurations["DB_PWD"],auth_plugin='mysql_native_password',port= db_configurations["DB_PORT"])
             # self.conn = psycopg2.connect(self.conn_string)
             self.cursor = self.conn.cursor()
@@ -24,7 +25,7 @@ class DbManager(object):
     def create_tables(self):
         """ create tables in the database"""
         commands = [
-            """CREATE TABLE IF NOT EXISTS user_details (
+            """CREATE TABLE IF NOT EXISTS sanctions_list (
                     id INT PRIMARY KEY AUTO_INCREMENT,
                     name TEXT,
                     original_script TEXT,

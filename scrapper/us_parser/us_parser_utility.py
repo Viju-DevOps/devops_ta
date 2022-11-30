@@ -4,7 +4,7 @@ import datetime
 import json
 from utils import split_values_and_generate_list,dob_format_converter_us,json_converter,us_gender
 import pandas as pd
-from datetime import timedelta, date
+
 
 def start_us_web_scraping(uk_url):
     """ Function to scrape sanction list from uk html page
