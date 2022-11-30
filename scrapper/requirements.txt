@@ -5,3 +5,5 @@ bs4
 html5lib
 psycopg2
 PyPDF2
+mysql-connector-python
+pandas
