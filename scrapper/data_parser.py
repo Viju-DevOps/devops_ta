@@ -72,7 +72,7 @@ def start_db_insertion(configurations, data_list):
 
     """
     db_obj = DbManager(configurations)
-    db_obj.multiple_row_insertion(data_list, 'user_details')
+    db_obj.multiple_row_insertion(data_list, 'sanctions_list')
     db_obj.close_db_connection()
 
 
